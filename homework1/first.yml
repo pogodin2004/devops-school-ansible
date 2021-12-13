@@ -1,0 +1,31 @@
+---
+- name: installing Apache2
+  hosts: node1.example.com
+  tasks:
+  - name: install Apache
+    yum:
+      name: httpd
+      state: present
+  - name: start Apache
+    service:
+      name: httpd
+      state: started
+  - name: create index file
+    copy:
+      dest: /var/www/html/index.html
+      content: "Welcome to my web server\n"
+  - name: openn http port
+    firewalld:
+      port: 80/tcp
+      permanent: yes
+      state: enabled
+  - name: open https
+    firewalld:
+      port: 443/tcp
+      permanent: yes
+      state: enabled
+  - name: reload firewalld
+    service:
+      name: firewalld
+      state: reloaded
+...

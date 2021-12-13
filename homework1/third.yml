@@ -1,0 +1,27 @@
+---
+- name: change grub parameters
+  hosts: nodes
+  tasks:
+  - name: search for matches
+    lineinfile:
+      path: /etc/default/grub
+      state: present
+      regexp: (GRUB_CMDLINE_LINUX=\".*?)(\s*{{ item }}=\d+)(.*\")$
+      line: '\g<1>\g<3>'
+      backrefs: true
+    loop:
+      - biosdevname
+      - net.ifnames
+  - name: add grub parameters
+    lineinfile:
+      path: /etc/default/grub
+      state: present
+      regexp: '^(GRUB_CMDLINE_LINUX=\".*)(\")$'
+      line: '\g<1> {{ item  }}\g<2>'
+      backrefs: true
+    loop:
+      - biosdevname=0
+      - net.ifnames=0
+  - name: wr mem
+    command: grub2-mkconfig
+...

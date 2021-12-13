@@ -1,0 +1,28 @@
+---
+- name: remove Apache2
+  hosts: nodes
+  tasks:
+  - name: remove Apache2
+    yum:
+      name: httpd
+      state: absent
+  - name: del index file
+    file:
+      dest: /var/www/html/index.html
+      state: absent
+  - name: close http
+    firewalld:
+      port: 80/tcp
+      permanent: true
+      state: disabled
+  - name: close https
+    firewalld:
+      port: 443/tcp
+      permanent: true
+      state: disabled
+  - name: reloaded firewalld
+    service:
+      name: firewalld
+      state: reloaded
+          
+...
