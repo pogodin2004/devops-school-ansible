@@ -10,7 +10,7 @@
     service:
       name: httpd
       state: started
-	  enabled: yes
+      enabled: yes
   - name: create index file
     copy:
       dest: /var/www/html/index.html
