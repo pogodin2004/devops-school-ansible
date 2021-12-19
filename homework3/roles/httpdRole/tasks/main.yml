@@ -1,0 +1,28 @@
+---
+# tasks file for httpdRole
+- name: install {{ packagename }}
+  package:
+    name: "{{ packagename }}"
+    state: present
+- name: start {{ packagename }}
+  service: 
+    name: "{{ packagename }}"
+    state: started
+    enabled: yes
+- name: create index file
+  template: 
+    src: welcome.j2
+    dest: "{{ path_to_file }}"
+- name: open_http
+  firewalld:
+    service: "{{ open_http }}"
+    permanent: true
+    state: enabled
+- name: open_htpps
+  firewalld:
+    service: "{{ open_https }}"
+    permanent: true
+    state: enabled
+  notify:
+    -- reload_firewalld
+...

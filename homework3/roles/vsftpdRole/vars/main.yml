@@ -1,0 +1,10 @@
+---
+# vars file for vsftpdRole
+packagename: vsftpd
+firewall: firewalld
+ftp_template_path: /etc/vsftpd/vsftpd.conf
+open_ftp_port: ftp
+public_dir: /var/ftp/pub
+upload_dir: /var/ftp/pub/upload
+set_ftp_write_mode: ftpd_anon_write
+...

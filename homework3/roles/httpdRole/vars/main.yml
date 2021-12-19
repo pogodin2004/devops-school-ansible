@@ -1,0 +1,7 @@
+---
+packagename: httpd
+path_to_file: /var/www/html/index.html
+open_http: http
+open_https: https
+
+

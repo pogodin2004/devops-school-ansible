@@ -1,0 +1,58 @@
+---
+# tasks file for vsftpdRole
+- name: install {{ packagename }}
+  package:
+    name: "{{ packagename }}"
+    state: present
+- name: start {{ packagename }}
+  service:
+    name: "{{ packagename }}"
+    state: started
+    enabled: yes
+- name: install selinux utils
+  yum:
+    name: policycoreutils-python.x86_64
+    state: present
+- name: start selinux
+  selinux:
+    policy: targeted
+    state: enforcing
+- name: add ftp public directory
+  file:
+    state: directory
+    path: "{{ public_dir }}"
+    mode: '755'
+    setype: public_content_rw_t
+- name: add ftp upload directory
+  file:
+    state: directory
+    path: "{{ upload_dir }}"
+    mode: '777'
+    setype: public_content_rw_t
+- name: SElinus Booleans
+  seboolean:
+    name: "{{ set_ftp_write_mode }}"
+    state: yes
+    persistent: yes
+- name: ftp template
+  template:
+    src: ftp_template.j2
+    dest: "{{ ftp_template_path }}"
+  notify:
+  - restart_vsftpd
+- name: install firewalld
+  yum:
+    name: "{{ firewall }}"
+    state: present
+- name: enable firewalld
+  service:
+    name: "{{ firewall }}"
+    state: started
+    enabled: yes
+- name: open ftp port
+  firewalld:
+    service: "{{ open_ftp_port }}"
+    permanent: true
+    state: enabled
+  notify:
+  - restart_firewalld

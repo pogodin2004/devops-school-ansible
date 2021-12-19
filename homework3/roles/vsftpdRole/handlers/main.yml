@@ -1,0 +1,11 @@
+---
+# handlers file for vsftpdRole
+
+- name: restart_vsftpd
+  service: 
+    name: "{{ packagename }}"
+    state: restarted
+- name: restart_firewalld
+  service:
+    name: "{{ firewall }}"
+    state: restarted

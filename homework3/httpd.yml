@@ -1,0 +1,6 @@
+---
+- name: install Apache
+  hosts: node1.example.com
+  roles:
+    - role: httpdRole
+...
